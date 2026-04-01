@@ -1,103 +1,109 @@
-# Lab 1: Grade Evaluator & Archiver
-
-A Python application that calculates a student's final academic standing based on a CSV file of course grades, and a Bash shell script that automates archiving of grade files.
-
----
-
-## Project Files
-
-| File | Description |
-|---|---|
-| `grade-evaluator.py` | Python script that validates and evaluates grades |
-| `organizer.sh` | Bash script that archives grades.csv and logs the operation |
-| `grades.csv` | CSV file containing course grades |
+# Lab 1 — Grade Evaluator & Archiver
+### by bidriss-hub
 
 ---
 
-## How to Run the Python Application
+## What is this project?
 
-### Requirements
-- Python 3.x installed
-
-### Steps
-1. Make sure `grades.csv` is in the same folder as `grade-evaluator.py`
-2. Open your terminal and navigate to the project folder:
-```
-   cd path/to/your/folder
-```
-3. Run the script:
-```
-   python grade-evaluator.py
-```
-4. When prompted, type the filename:
-```
-   Enter the name of the CSV file to process (e.g., grades.csv): grades.csv
-```
-
-### What it does
-- Validates all scores are between 0 and 100
-- Validates that weights total 100 (Formative = 60, Summative = 40)
-- Calculates the final grade and GPA (out of 5.0)
-- Determines Pass/Fail status (requires 50% minimum in BOTH categories)
-- Identifies which failed formative assignment is eligible for resubmission
+This project reads a student's grades from a CSV file, validates them, calculates the final GPA, and tells you whether the student passed or failed. It also includes a shell script that automatically archives old grade files and keeps the workspace clean.
 
 ---
 
-## How to Run the Shell Script
+## Files in this project
 
-### Requirements
-- Bash shell (Linux, macOS, or Git Bash on Windows)
-
-### Steps
-1. Open your terminal and navigate to the project folder:
-```
-   cd path/to/your/folder
-```
-2. Make the script executable (first time only):
-```
-   chmod +x organizer.sh
-```
-3. Run the script:
-```
-   ./organizer.sh
-```
-
-### What it does
-- Creates an `archive` folder if it does not exist
-- Renames `grades.csv` with a timestamp (e.g., `grades_20251105-170000.csv`)
-- Moves the renamed file into the `archive` folder
-- Creates a new empty `grades.csv` ready for the next batch
-- Logs the operation into `organizer.log`
+- **grade-evaluator.py** — the main Python program
+- **grades.csv** — the student grade data
+- **organizer.sh** — a Bash script that archives grades.csv
+- **README.md** — this file
 
 ---
 
-## grades.csv Format
+## How to run the Python program
 
-The CSV file must use tab separation with the following columns:
-
-| Column | Description |
-|---|---|
-| `assignment` | Name of the assignment |
-| `group` | Either `Formative` or `Summative` |
-| `score` | Score between 0 and 100 |
-| `weight` | Weight of the assignment |
-
-### Example
+Make sure you have Python 3 installed. Open your terminal in the project folder and run:
 ```
-assignment	group	score	weight
-Quiz	Formative	85	20
-Midterm Project	Summative	70	20
+python grade-evaluator.py
 ```
+
+When asked, type the filename:
+```
+grades.csv
+```
+
+The program will show you:
+- Whether all scores and weights are valid
+- The student's GPA out of 5.0
+- Whether the student PASSED or FAILED
+- Which assignments are eligible for resubmission
 
 ---
 
-## GPA Formula
+## How to run the shell script
+
+Open Git Bash in the project folder and run:
 ```
-GPA = (Total Grade / 100) * 5.0
+bash organizer.sh
 ```
 
-## Pass/Fail Rule
+The script will:
+- Create an archive folder if it does not exist
+- Rename grades.csv with a timestamp and move it to the archive folder
+- Create a fresh empty grades.csv ready for new data
+- Log everything it did in organizer.log
 
-A student **PASSES** only if they score **50% or above in BOTH**:
-- Formative assignments (weighted out of 60)
-- Summative assignments (weighted out of 40)
+---
+
+## grades.csv format
+
+The file uses commas to separate values and must have these four columns:
+```
+assignment,group,score,weight
+```
+
+- **assignment** — name of the assignment
+- **group** — either Formative or Summative
+- **score** — a number between 0 and 100
+- **weight** — how much the assignment counts toward the final grade
+
+---
+
+## Grading rules
+
+- Formative assignments must add up to a weight of 60
+- Summative assignments must add up to a weight of 40
+- The student must score at least 50% in BOTH categories to pass
+- GPA is calculated as: (Final Grade / 100) x 5.0
+
+---
+
+## Example output
+```
+--- Processing Grades ---
+
+>> Grade Validation:
+   All scores are valid (0-100).
+
+>> Weight Validation:
+   Total Weight:      100.0 (expected 100)
+   Formative Weight:  60.0 (expected 60)
+   Summative Weight:  40.0 (expected 40)
+   All weights are valid.
+
+>> Grade Calculation:
+   Formative Score:   56.67%
+   Summative Score:   65.00%
+   Final Grade:       60.00%
+   GPA:               3.00 / 5.0
+
+>> Pass/Fail Status:
+   Formative: PASSED (56.67%)
+   Summative: PASSED (65.00%)
+
+==================================================
+   FINAL STATUS: PASSED
+
+>> Resubmission Eligible Assignment(s):
+   - Group Exercise (Score: 40.0%, Weight: 20.0)
+   - Functions and Debugging Lab (Score: 45.0%, Weight: 20.0)
+==================================================
+```
